@@ -21,7 +21,7 @@ machine_t *machine_create()
 
 int (**machine_initialize_handlers())(machine_t*)
 {
-  int (**handlers)(machine_t*) = (int (**)(machine_t*)) malloc(sizeof(int (*)(machine_t*)) * 0xFF);
+  int (**handlers)(machine_t*) = (int (**)(machine_t*)) malloc(sizeof(int (*)(machine_t*)) * 0xFF + 1);
 
   handlers[0xA0] = handler_ldy_imm;
   handlers[0xA2] = handler_ldx_imm;
@@ -50,11 +50,14 @@ int machine_load(machine_t *machine, const uint8_t program[], size_t length, uin
 int machine_execute(machine_t *machine)
 {
   while (!at_program_end(machine)) {
-    uint8_t byte = memory_get_byte(machine->memory, machine->cpu->pc);
+    uint8_t byte = memory_get_next_byte(machine->memory, machine->cpu);
+    int (*handler)(machine_t*) = handler_get(machine->handlers, byte);
 
-    printf("next byte: %02x\n", byte);
-    machine->cpu->pc++;
+    if (handler != NULL) {
+      handler(machine);
+    }
   }
 
+  cpu_registers_to_string(machine->cpu);
   return 0;
 }

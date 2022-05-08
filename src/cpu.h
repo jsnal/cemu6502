@@ -22,5 +22,6 @@ typedef struct cpu_struct {
 cpu_t *cpu_create();
 bool get_processor_status(const cpu_t*, enum ps_flag);
 void set_processor_status(cpu_t*, enum ps_flag, bool);
+void cpu_registers_to_string(const cpu_t*);
 
 #endif
