@@ -16,3 +16,8 @@ uint8_t memory_get_byte(memory_t *memory, uint16_t index)
 {
   return memory->blocks[index];
 }
+
+uint8_t memory_get_next_byte(memory_t *memory, cpu_t* cpu)
+{
+  return memory_get_byte(memory, cpu->pc++);
+}

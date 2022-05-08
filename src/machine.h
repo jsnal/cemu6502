@@ -7,13 +7,14 @@
 
 typedef struct machine_struct {
   cpu_t *cpu;
+  int (**handlers)(struct machine_struct*);
   memory_t *memory;
   uint16_t program_start;
   uint16_t program_size;
 } machine_t;
 
 machine_t *machine_create();
-
+int (**(machine_initialize_handlers()))(machine_t*);
 int machine_load(machine_t*, const uint8_t program[], size_t length, uint16_t start);
 int machine_execute(machine_t*);
 
