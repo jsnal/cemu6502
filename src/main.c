@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "log.h"
+
 int main()
 {
   machine_t *machine = machine_create();
@@ -11,4 +13,10 @@ int main()
   machine_load(machine, program, sizeof(program) / sizeof(uint8_t), 0x0600);
 
   machine_execute(machine);
+
+  set_quiet_mode(false);
+  dbgln("%s", "Hello World!");
+  wrnln("%s", "Hello World!");
+  infln("%s", "Hello World!");
+  errln("%s", "Hello World!");
 }

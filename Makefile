@@ -4,6 +4,7 @@ NAME = all
 
 SOURCES = \
 					src/cpu.c \
+					src/log.c \
 					src/handlers.c \
 					src/machine.c \
 					src/memory.c \
