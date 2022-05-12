@@ -31,9 +31,11 @@ handler_params_t *handler_get_params(machine_t *machine, uint8_t opcode)
   return params;
 }
 
+#include "utils.h"
+
 int handler_ld_imm(handler_params_t *params)
 {
-  assert(params->reg2 != NULL);
+  assert_or_fatal(params->reg1 != NULL && params->reg2 == NULL);
   *params->reg1 = memory_get_next_byte(params->memory, params->cpu);
   return 0;
 }

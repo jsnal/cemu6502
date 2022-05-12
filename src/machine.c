@@ -55,6 +55,7 @@ int machine_execute(machine_t *machine)
     if (handler != NULL) {
       handler_params_t *params = handler_get_params(machine, byte);
       handler(params);
+      free(params);
     }
   }
 

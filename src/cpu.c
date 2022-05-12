@@ -1,4 +1,5 @@
 #include "cpu.h"
+#include "log.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -27,5 +28,5 @@ void set_processor_status(cpu_t *cpu, enum ps_flag flag, bool val)
 // TODO: This should return a string not print
 void cpu_registers_to_string(const cpu_t *cpu)
 {
-  printf("PC: 0x%04X PS: 0x%02X SP: 0x%02X A: 0x%02X X: 0x%02X Y: 0x%02X\n", cpu->pc, cpu->ps, cpu->sp, cpu->a, cpu->x, cpu->y);
+  dbgln("PC: 0x%04X PS: 0x%02X SP: 0x%02X A: 0x%02X X: 0x%02X Y: 0x%02X", cpu->pc, cpu->ps, cpu->sp, cpu->a, cpu->x, cpu->y);
 }
