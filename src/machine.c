@@ -19,13 +19,12 @@ machine_t *machine_create()
   return machine;
 }
 
-int (**machine_initialize_handlers())(machine_t*)
+int (**machine_initialize_handlers())(handler_params_t*)
 {
-  int (**handlers)(machine_t*) = (int (**)(machine_t*)) malloc(sizeof(int (*)(machine_t*)) * 0xFF + 1);
+  int (**handlers)(handler_params_t*) =
+    (int (**)(handler_params_t*)) malloc(sizeof(int (*)(handler_params_t*)) * 0xFF + 1);
 
-  handlers[0xA0] = handler_ldy_imm;
-  handlers[0xA2] = handler_ldx_imm;
-  handlers[0xA9] = handler_lda_imm;
+  handlers[0xA0] = handlers[0xA2] = handlers[0xA9] = handler_ld_imm;
 
   return handlers;
 }
@@ -51,10 +50,11 @@ int machine_execute(machine_t *machine)
 {
   while (!at_program_end(machine)) {
     uint8_t byte = memory_get_next_byte(machine->memory, machine->cpu);
-    int (*handler)(machine_t*) = handler_get(machine->handlers, byte);
+    int (*handler)(handler_params_t*) = handler_get(machine->handlers, byte);
 
     if (handler != NULL) {
-      handler(machine);
+      handler_params_t *params = handler_get_params(machine, byte);
+      handler(params);
     }
   }
 
