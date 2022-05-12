@@ -1,5 +1,6 @@
 #include "machine.h"
 #include "handlers.h"
+#include "utils.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -32,10 +33,7 @@ int (**machine_initialize_handlers())(handler_params_t*)
 
 int machine_load(machine_t *machine, const uint8_t program[], size_t length, uint16_t start)
 {
-  if (machine == NULL) {
-    // TODO: Add error messages
-    return -1;
-  }
+  assert_or_fatal(machine != NULL);
 
   for (size_t i = 0; i < length; i++) {
     memory_set_byte(machine->memory, start + i, program[i]);
@@ -49,15 +47,17 @@ int machine_load(machine_t *machine, const uint8_t program[], size_t length, uin
 
 int machine_execute(machine_t *machine)
 {
-  while (!at_program_end(machine)) {
-    uint8_t byte = memory_get_next_byte(machine->memory, machine->cpu);
-    int (*handler)(handler_params_t*) = handler_get(machine->handlers, byte);
+  assert_or_fatal(machine != NULL);
 
-    if (handler != NULL) {
-      handler_params_t *params = handler_get_params(machine, byte);
-      handler(params);
-      free(params);
-    }
+  while (!at_program_end(machine)) {
+    uint8_t opcode = memory_get_next_byte(machine->memory, machine->cpu);
+    int (*handler)(handler_params_t*) = handler_get(machine->handlers, opcode);
+
+    assert_or_fatal(handler != NULL);
+
+    handler_params_t *params = handler_get_params(machine, opcode);
+    handler(params);
+    free(params);
     /* cpu_registers_to_string(machine->cpu); */
   }
 
