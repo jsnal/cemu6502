@@ -25,6 +25,7 @@ int (**machine_initialize_handlers())(handler_params_t*)
     (int (**)(handler_params_t*)) malloc(sizeof(int (*)(handler_params_t*)) * 0xFF + 1);
 
   handlers[0xA0] = handlers[0xA2] = handlers[0xA9] = handler_ld_imm;
+  handlers[0xA5] = handlers[0xA6] = handlers[0xA4] = handler_ld_zpg;
 
   return handlers;
 }
@@ -57,6 +58,7 @@ int machine_execute(machine_t *machine)
       handler(params);
       free(params);
     }
+    /* cpu_registers_to_string(machine->cpu); */
   }
 
   cpu_registers_to_string(machine->cpu);

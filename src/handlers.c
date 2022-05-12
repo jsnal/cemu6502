@@ -1,7 +1,14 @@
 #include "handlers.h"
 #include "machine.h"
 #include "memory.h"
+#include "utils.h"
 #include <stddef.h>
+
+static void set_zero_and_negative_flags(cpu_t *cpu, uint8_t value)
+{
+  set_processor_status(cpu, PS_ZERO, value == 0);
+  set_processor_status(cpu, PS_NEGATIVE, (value & 0x80) == 0x80);
+}
 
 int (*handler_get(int (**handlers)(handler_params_t*), uint8_t opcode))(handler_params_t*)
 {
@@ -25,18 +32,28 @@ handler_params_t *handler_get_params(machine_t *machine, uint8_t opcode)
   switch (opcode) {
     case 0xA0: params->reg1 = &machine->cpu->y; break;
     case 0xA2: params->reg1 = &machine->cpu->x; break;
+    case 0xA4: params->reg1 = &machine->cpu->y; break;
+    case 0xA5: params->reg1 = &machine->cpu->a; break;
+    case 0xA6: params->reg1 = &machine->cpu->x; break;
     case 0xA9: params->reg1 = &machine->cpu->a; break;
   }
 
   return params;
 }
 
-#include "utils.h"
-
 int handler_ld_imm(handler_params_t *params)
 {
   assert_or_fatal(params->reg1 != NULL && params->reg2 == NULL);
   *params->reg1 = memory_get_next_byte(params->memory, params->cpu);
+  set_zero_and_negative_flags(params->cpu, *params->reg1);
   return 0;
 }
 
+int handler_ld_zpg(handler_params_t *params)
+{
+  assert_or_fatal(params->reg1 != NULL && params->reg2 == NULL);
+  uint8_t address = memory_get_next_byte(params->memory, params->cpu);
+  *params->reg1 = memory_get_byte(params->memory, address);
+  set_zero_and_negative_flags(params->cpu, *params->reg1);
+  return 0;
+}
