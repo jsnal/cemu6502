@@ -27,6 +27,7 @@ int (**machine_initialize_handlers())(handler_params_t*)
 
   handlers[0xA0] = handlers[0xA2] = handlers[0xA9] = handler_ld_imm;
   handlers[0xA5] = handlers[0xA6] = handlers[0xA4] = handler_ld_zpg;
+  handlers[0xB4] = handlers[0xB5] = handlers[0xB6] = handler_ld_zpg_idx;
   handlers[0x84] = handlers[0x85] = handlers[0x86] = handler_st_zpg;
 
   return handlers;

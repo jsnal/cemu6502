@@ -30,18 +30,34 @@ handler_params_t *handler_get_params(machine_t *machine, uint8_t opcode)
   params->reg1 = params->reg2 = NULL;
 
   switch (opcode) {
-    /* Store Instructions */
+    /* Store Zero Page */
     case 0x84: params->reg1 = &machine->cpu->y; break;
     case 0x85: params->reg1 = &machine->cpu->a; break;
     case 0x86: params->reg1 = &machine->cpu->x; break;
 
-    /* Load Instructions */
+    /* Load Immediate */
     case 0xA0: params->reg1 = &machine->cpu->y; break;
     case 0xA2: params->reg1 = &machine->cpu->x; break;
     case 0xA4: params->reg1 = &machine->cpu->y; break;
+
+    /* Load Zero Page */
     case 0xA5: params->reg1 = &machine->cpu->a; break;
     case 0xA6: params->reg1 = &machine->cpu->x; break;
     case 0xA9: params->reg1 = &machine->cpu->a; break;
+
+    /* Load Zero Page Indexed */
+    case 0xB4:
+      params->reg1 = &machine->cpu->y;
+      params->reg2 = &machine->cpu->x;
+      break;
+    case 0xB5:
+      params->reg1 = &machine->cpu->a;
+      params->reg2 = &machine->cpu->x;
+      break;
+    case 0xB6:
+      params->reg1 = &machine->cpu->x;
+      params->reg2 = &machine->cpu->y;
+      break;
   }
 
   return params;
@@ -64,7 +80,14 @@ int handler_ld_zpg(handler_params_t *params)
   return 0;
 }
 
-/* int handler_ld_zpg_x */
+int handler_ld_zpg_idx(handler_params_t *params)
+{
+  assert_or_fatal(params->reg1 != NULL && params->reg2 != NULL);
+  uint8_t address = memory_get_next_byte(params->memory, params->cpu);
+  *params->reg1 = memory_get_byte(params->memory, address) + *params->reg2;
+  set_zero_and_negative_flags(params->cpu, *params->reg1);
+  return 0;
+}
 
 int handler_st_zpg(handler_params_t *params)
 {
