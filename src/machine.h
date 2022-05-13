@@ -5,6 +5,10 @@
 #include "memory.h"
 #include <stdlib.h>
 
+#define A machine->cpu->a
+#define X machine->cpu->x
+#define Y machine->cpu->y
+
 typedef struct handler_params_struct {
   cpu_t *cpu;
   memory_t *memory;

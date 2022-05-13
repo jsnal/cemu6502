@@ -31,14 +31,14 @@ handler_params_t *handler_get_params(machine_t *machine, uint8_t opcode)
 
   switch (opcode) {
     /* Store Zero Page */
-    case 0x84: params->reg1 = &machine->cpu->y; break;
-    case 0x85: params->reg1 = &machine->cpu->a; break;
-    case 0x86: params->reg1 = &machine->cpu->x; break;
+    case 0x84: params->reg1 = &Y; break;
+    case 0x85: params->reg1 = &A; break;
+    case 0x86: params->reg1 = &X; break;
 
     /* Load Immediate */
-    case 0xA0: params->reg1 = &machine->cpu->y; break;
-    case 0xA2: params->reg1 = &machine->cpu->x; break;
-    case 0xA4: params->reg1 = &machine->cpu->y; break;
+    case 0xA0: params->reg1 = &Ymachine->cpu->y; break;
+    case 0xA2: params->reg1 = &Xmachine->cpu->x; break;
+    case 0xA4: params->reg1 = &Ymachine->cpu->y; break;
 
     /* Load Zero Page */
     case 0xA5: params->reg1 = &machine->cpu->a; break;
