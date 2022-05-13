@@ -30,6 +30,12 @@ handler_params_t *handler_get_params(machine_t *machine, uint8_t opcode)
   params->reg1 = params->reg2 = NULL;
 
   switch (opcode) {
+    /* Store Instructions */
+    case 0x84: params->reg1 = &machine->cpu->y; break;
+    case 0x85: params->reg1 = &machine->cpu->a; break;
+    case 0x86: params->reg1 = &machine->cpu->x; break;
+
+    /* Load Instructions */
     case 0xA0: params->reg1 = &machine->cpu->y; break;
     case 0xA2: params->reg1 = &machine->cpu->x; break;
     case 0xA4: params->reg1 = &machine->cpu->y; break;
@@ -55,5 +61,15 @@ int handler_ld_zpg(handler_params_t *params)
   uint8_t address = memory_get_next_byte(params->memory, params->cpu);
   *params->reg1 = memory_get_byte(params->memory, address);
   set_zero_and_negative_flags(params->cpu, *params->reg1);
+  return 0;
+}
+
+/* int handler_ld_zpg_x */
+
+int handler_st_zpg(handler_params_t *params)
+{
+  assert_or_fatal(params->reg1 != NULL && params->reg2 == NULL);
+  uint8_t address = memory_get_next_byte(params->memory, params->cpu);
+  memory_set_byte(params->memory, address, *params->reg1);
   return 0;
 }

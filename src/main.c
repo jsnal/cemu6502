@@ -14,7 +14,8 @@ int main()
     0xA2, 0x15,
     0xA0, 0xFF,
     0xA5, 0x0F,
-    0xA6, 0x0F
+    0xA6, 0x0F,
+    0x84, 0x10
   };
 
   machine_load(machine, program, sizeof(program) / sizeof(uint8_t), 0x0600);
@@ -23,4 +24,7 @@ int main()
   memory_set_byte(machine->memory, 0x0F, 0xAA);
 
   machine_execute(machine);
+
+  dbgln("0x%X", memory_get_byte(machine->memory, 0x0F));
+  dbgln("0x%X", memory_get_byte(machine->memory, 0x10));
 }
