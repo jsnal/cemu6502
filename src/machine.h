@@ -19,13 +19,13 @@ typedef struct handler_params_struct {
 typedef struct machine_struct {
   cpu_t *cpu;
   memory_t *memory;
-  int (**handlers)(handler_params_t*);
+  void (**handlers)(handler_params_t*);
   uint16_t program_start;
   uint16_t program_size;
 } machine_t;
 
 machine_t *machine_create();
-int (**(machine_initialize_handlers()))(handler_params_t*);
+void (**(machine_initialize_handlers()))(handler_params_t*);
 int machine_load(machine_t*, const uint8_t program[], size_t length, uint16_t start);
 int machine_execute(machine_t*);
 
