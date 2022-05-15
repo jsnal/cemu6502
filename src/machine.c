@@ -12,7 +12,6 @@ static bool at_program_end(const machine_t *machine)
 machine_t *machine_create()
 {
   machine_t *machine = (machine_t*) malloc(sizeof(machine_t));
-  machine->handlers = machine_initialize_handlers();
   machine->cpu = cpu_create();
   machine->memory = memory_create();
   machine->program_start = 0;
@@ -25,12 +24,13 @@ void (**machine_initialize_handlers())(handler_params_t*)
   void (**handlers)(handler_params_t*) =
     (void (**)(handler_params_t*)) malloc(sizeof(int (*)(handler_params_t*)) * 0xFF + 1);
 
-  handlers[0xA0] = handlers[0xA2] = handlers[0xA9] = handler_ld_imm;
-  handlers[0xA5] = handlers[0xA6] = handlers[0xA4] = handler_ld_zpg;
-  handlers[0xAC] = handlers[0xAD] = handlers[0xAE] = handler_ld_abs;
-  handlers[0xB4] = handlers[0xB5] = handlers[0xB6] = handler_ld_zpg_idx;
-  handlers[0x84] = handlers[0x85] = handlers[0x86] = handler_st_zpg;
-  handlers[0x8C] = handlers[0x8D] = handlers[0x8E] = handler_st_abs;
+//  handlers[0xA0] = handlers[0xA2] = handlers[0xA9] = handler_ld_imm;
+//  handlers[0xA5] = handlers[0xA6] = handlers[0xA4] = handler_ld_zpg;
+//  handlers[0xAC] = handlers[0xAD] = handlers[0xAE] = handler_ld_abs;
+//  handlers[0xB4] = handlers[0xB5] = handlers[0xB6] = handler_ld_zpg_idx;
+//  handlers[0x84] = handlers[0x85] = handlers[0x86] = handler_st_zpg;
+//  handlers[0x8C] = handlers[0x8D] = handlers[0x8E] = handler_st_abs;
+//  handlers[0xEA] = handler_nop;
 
   return handlers;
 }
@@ -52,11 +52,11 @@ int machine_load(machine_t *machine, const uint8_t program[], size_t length, uin
 int machine_execute(machine_t *machine)
 {
   assert_or_fatal(machine != NULL);
-  handler_params_t params = { .cpu = machine->cpu, .memory = machine->memory };
+  handler_params_t params = { .machine = machine };
 
   while (!at_program_end(machine)) {
     uint8_t opcode = memory_get_next_byte(machine->memory, machine->cpu);
-    void (*handler)(handler_params_t*) = handler_get(machine->handlers, opcode);
+    void (*handler)(handler_params_t*) = handler_get(opcode);
 
     assert_or_fatal(handler != NULL);
 
