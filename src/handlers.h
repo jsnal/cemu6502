@@ -10,7 +10,7 @@
 #define REG2 params->reg2
 
 void (*handler_get(void (**handlers)(handler_params_t*), uint8_t opcode))(handler_params_t*);
-handler_params_t *handler_get_params(struct machine_struct*, uint8_t opcode);
+handler_params_t *handler_get_params(handler_params_t*, machine_t*, uint8_t);
 void handler_ld_imm(handler_params_t*);
 void handler_ld_zpg(handler_params_t*);
 void handler_st_zpg(handler_params_t*);

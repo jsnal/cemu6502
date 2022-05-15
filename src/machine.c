@@ -50,6 +50,7 @@ int machine_load(machine_t *machine, const uint8_t program[], size_t length, uin
 int machine_execute(machine_t *machine)
 {
   assert_or_fatal(machine != NULL);
+  handler_params_t params = { .cpu = machine->cpu, .memory = machine->memory };
 
   while (!at_program_end(machine)) {
     uint8_t opcode = memory_get_next_byte(machine->memory, machine->cpu);
@@ -57,10 +58,8 @@ int machine_execute(machine_t *machine)
 
     assert_or_fatal(handler != NULL);
 
-    handler_params_t *params = handler_get_params(machine, opcode);
-    handler(params);
-    free(params);
-    /* cpu_registers_to_string(machine->cpu); */
+    handler_get_params(&params, machine, opcode);
+    handler(&params);
   }
 
   cpu_registers_to_string(machine->cpu);

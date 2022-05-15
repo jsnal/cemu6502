@@ -27,11 +27,8 @@ void (*handler_get(void (**handlers)(handler_params_t*), uint8_t opcode))(handle
 // TODO: This isn't the best way to pass in parameters but it allows me to reuse
 //       common code among certain instructions. It would be nice to have a better
 //       way of implementing instructions that have similar implementation.
-handler_params_t *handler_get_params(machine_t *machine, uint8_t opcode)
+handler_params_t *handler_get_params(handler_params_t *params, machine_t *machine, uint8_t opcode)
 {
-  handler_params_t *params = (handler_params_t*) malloc(sizeof(handler_params_t));
-  params->cpu = machine->cpu;
-  params->memory = machine->memory;
   REG1 = REG2 = NULL;
 
   switch (opcode) {
