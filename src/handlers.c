@@ -65,39 +65,39 @@ handler_params_t *handler_get_params(handler_params_t *params, machine_t *machin
 
   switch (opcode) {
     /* Store Zero Page */
-    case 0x84: REG1 = &Y; break;
-    case 0x85: REG1 = &A; break;
-    case 0x86: REG1 = &X; break;
+    PARAM(0x84, Y);
+    PARAM(0x85, A);
+    PARAM(0x86, Y);
 
-    case 0x8C: REG1 = &Y; break;
-    case 0x8D: REG1 = &A; break;
-    case 0x8E: REG1 = &X; break;
+    PARAM(0x8C, Y);
+    PARAM(0x8D, A);
+    PARAM(0x8E, X);
 
     /* Load Immediate */
-    case 0xA0: REG1 = &Y; break;
-    case 0xA2: REG1 = &X; break;
-    case 0xA9: REG1 = &A; break;
+    PARAM(0xA0, Y);
+    PARAM(0xA2, X);
+    PARAM(0xA9, A);
 
     /* Load Zero Page */
-    case 0xA5: REG1 = &A; break;
-    case 0xA6: REG1 = &X; break;
-    case 0xA4: REG1 = &Y; break;
+    PARAM(0xA5, A);
+    PARAM(0xA6, X);
+    PARAM(0xA4, Y);
 
     /* Load Absolute */
-    case 0xAC: REG1 = &A; break;
-    case 0xAD: REG1 = &Y; break;
-    case 0xAE: REG1 = &X; break;
+    PARAM(0xAC, A);
+    PARAM(0xAD, Y);
+    PARAM(0xAE, X);
 
     /* Load Zero Page Indexed */
-    case 0xB4: REG1 = &Y; REG2 = &X; break;
-    case 0xB5: REG1 = &A; REG2 = &X; break;
-    case 0xB6: REG1 = &X; REG2 = &Y; break;
+    PARAM(0xB4, Y, X);
+    PARAM(0xB5, A, X);
+    PARAM(0xB6, X, Y);
 
     /* Load Absolute Indexed */
-    case 0xB9: REG1 = &A; REG2 = &Y; break;
-    case 0xBC: REG1 = &Y; REG2 = &X; break;
-    case 0xBD: REG1 = &A; REG2 = &X; break;
-    case 0xBE: REG1 = &X; REG2 = &Y; break;
+    PARAM(0xB9, A, Y);
+    PARAM(0xBC, Y, X);
+    PARAM(0xBD, A, X);
+    PARAM(0xBE, X, Y);
   }
 
   return params;
