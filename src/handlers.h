@@ -33,6 +33,8 @@ INSTRUCTION(ld_zpg);
 INSTRUCTION(ld_zpg_idx);
 INSTRUCTION(ld_abs);
 INSTRUCTION(ld_abs_idx);
+INSTRUCTION(ld_ind_idx);
+INSTRUCTION(ld_idx_ind);
 INSTRUCTION(st_zpg);
 INSTRUCTION(st_abs);
 

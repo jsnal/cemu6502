@@ -5,23 +5,23 @@
 #include <stddef.h>
 
 static void (*handlers[256])(handler_params_t*) = {
-/* 0x00            0x01  0x02            0x03  0x04                0x05                0x06                0x07  0x08  0x09                0x0A         0x0B  0x0C                0x0D                0x0E                0x0F*/
-   fail,           fail, fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x00 */
-   fail,           fail, fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x10 */
-   fail,           fail, fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x20 */
-   fail,           fail, fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x30 */
-   fail,           fail, fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x40 */
-   fail,           fail, fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x50 */
-   fail,           fail, fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x60 */
-   fail,           fail, fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x70 */
-   fail,           fail, fail,           fail, handler_st_zpg,     handler_st_zpg,     handler_st_zpg,     fail, fail, fail,               fail,        fail, handler_st_abs,     handler_st_abs,     handler_st_abs,     fail, /* 0x80 */
-   fail,           fail, fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x90 */
-   handler_ld_imm, fail, handler_ld_imm, fail, handler_ld_zpg,     handler_ld_zpg,     handler_ld_zpg,     fail, fail, handler_ld_imm,     fail,        fail, handler_ld_abs,     handler_ld_abs,     handler_ld_abs,     fail, /* 0xA0 */
-   fail,           fail, fail,           fail, handler_ld_zpg_idx, handler_ld_zpg_idx, handler_ld_zpg_idx, fail, fail, handler_ld_abs_idx, fail,        fail, handler_ld_abs_idx, handler_ld_abs_idx, handler_ld_abs_idx, fail, /* 0xB0 */
-   fail,           fail, fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0xC0 */
-   fail,           fail, fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0xD0 */
-   fail,           fail, fail,           fail, fail,               fail,               fail,               fail, fail, fail,               handler_nop, fail, fail,               fail,               fail,               fail, /* 0xE0 */
-   fail,           fail, fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0xF0 */
+/* 0x00            0x01                0x02            0x03  0x04                0x05                0x06                0x07  0x08  0x09                0x0A         0x0B  0x0C                0x0D                0x0E                0x0F*/
+   fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x00 */
+   fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x10 */
+   fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x20 */
+   fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x30 */
+   fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x40 */
+   fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x50 */
+   fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x60 */
+   fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x70 */
+   fail,           fail,               fail,           fail, handler_st_zpg,     handler_st_zpg,     handler_st_zpg,     fail, fail, fail,               fail,        fail, handler_st_abs,     handler_st_abs,     handler_st_abs,     fail, /* 0x80 */
+   fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x90 */
+   handler_ld_imm, handler_ld_ind_idx, handler_ld_imm, fail, handler_ld_zpg,     handler_ld_zpg,     handler_ld_zpg,     fail, fail, handler_ld_imm,     fail,        fail, handler_ld_abs,     handler_ld_abs,     handler_ld_abs,     fail, /* 0xA0 */
+   fail,           handler_ld_idx_ind, fail,           fail, handler_ld_zpg_idx, handler_ld_zpg_idx, handler_ld_zpg_idx, fail, fail, handler_ld_abs_idx, fail,        fail, handler_ld_abs_idx, handler_ld_abs_idx, handler_ld_abs_idx, fail, /* 0xB0 */
+   fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0xC0 */
+   fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0xD0 */
+   fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               handler_nop, fail, fail,               fail,               fail,               fail, /* 0xE0 */
+   fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0xF0 */
 };
 
 static void set_zero_and_negative_flags(cpu_t *cpu, uint8_t value)
@@ -47,6 +47,22 @@ static uint16_t get_abs_index_address(machine_t *machine, uint8_t reg)
   return get_abs_address(machine) + reg;
 }
 
+static uint16_t get_ind_index_address(machine_t *machine, uint8_t reg)
+{
+  uint8_t address = memory_get_next_byte(machine->memory, machine->cpu) + reg;
+  uint8_t low = memory_get_byte(machine->memory, address);
+  uint8_t high = memory_get_byte(machine->memory, address + 1);
+  return (high << 8) + low;
+}
+
+static uint16_t get_index_ind_address(machine_t *machine, uint8_t reg)
+{
+  uint8_t address = memory_get_next_byte(machine->memory, machine->cpu);
+  uint8_t low = memory_get_byte(machine->memory, address);
+  uint8_t high = memory_get_byte(machine->memory, address + 1);
+  return (high << 8) + low + reg;
+}
+
 void (*handler_get(uint8_t opcode))(handler_params_t*)
 {
   if (opcode < 0 || opcode > 0xFF) {
@@ -67,7 +83,7 @@ handler_params_t *handler_get_params(handler_params_t *params, machine_t *machin
     /* Store Zero Page */
     PARAM(0x84, Y);
     PARAM(0x85, A);
-    PARAM(0x86, Y);
+    PARAM(0x86, X);
 
     PARAM(0x8C, Y);
     PARAM(0x8D, A);
@@ -98,6 +114,10 @@ handler_params_t *handler_get_params(handler_params_t *params, machine_t *machin
     PARAM(0xBC, Y, X);
     PARAM(0xBD, A, X);
     PARAM(0xBE, X, Y);
+
+    /* Load Indirect */
+    PARAM(0xA1, A, X);
+    PARAM(0xB1, A, Y);
   }
 
   return params;
@@ -150,6 +170,22 @@ INSTRUCTION(ld_abs_idx)
   set_zero_and_negative_flags(params->machine->cpu, *REG1);
 }
 
+INSTRUCTION(ld_ind_idx)
+{
+  assert_or_fatal(REG1 && REG2);
+  uint16_t address = get_ind_index_address(params->machine, *REG2);
+  *REG1 = memory_get_byte(params->machine->memory, address);
+  set_zero_and_negative_flags(params->machine->cpu, *REG1);
+}
+
+INSTRUCTION(ld_idx_ind)
+{
+  assert_or_fatal(REG1 && REG2);
+  uint16_t address = get_index_ind_address(params->machine, *REG2);
+  *REG1 = memory_get_byte(params->machine->memory, address);
+  set_zero_and_negative_flags(params->machine->cpu, *REG1);
+}
+
 INSTRUCTION(st_zpg)
 {
   assert_or_fatal(REG1);
@@ -160,6 +196,6 @@ INSTRUCTION(st_zpg)
 INSTRUCTION(st_abs)
 {
   assert_or_fatal(REG1);
-  uint8_t address = get_abs_address(params->machine);
+  uint16_t address = get_abs_address(params->machine);
   memory_set_byte(params->machine->memory, address, *REG1);
 }
