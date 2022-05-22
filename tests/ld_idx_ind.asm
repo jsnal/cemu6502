@@ -1,0 +1,8 @@
+LDY #$05
+LDX #$88
+STX $0A
+LDX #$1b
+STX $0B
+LDX #$15
+STX $1b8d
+LDA ($0A), Y
