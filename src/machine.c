@@ -2,6 +2,7 @@
 #include "handlers.h"
 #include "utils.h"
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 
 static bool at_program_end(const machine_t *machine)
@@ -19,25 +20,19 @@ machine_t *machine_create()
   return machine;
 }
 
-void (**machine_initialize_handlers())(handler_params_t*)
+void machine_reset(machine_t *machine)
 {
-  void (**handlers)(handler_params_t*) =
-    (void (**)(handler_params_t*)) malloc(sizeof(int (*)(handler_params_t*)) * 0xFF + 1);
+  assert_or_fatal(machine);
 
-//  handlers[0xA0] = handlers[0xA2] = handlers[0xA9] = handler_ld_imm;
-//  handlers[0xA5] = handlers[0xA6] = handlers[0xA4] = handler_ld_zpg;
-//  handlers[0xAC] = handlers[0xAD] = handlers[0xAE] = handler_ld_abs;
-//  handlers[0xB4] = handlers[0xB5] = handlers[0xB6] = handler_ld_zpg_idx;
-//  handlers[0x84] = handlers[0x85] = handlers[0x86] = handler_st_zpg;
-//  handlers[0x8C] = handlers[0x8D] = handlers[0x8E] = handler_st_abs;
-//  handlers[0xEA] = handler_nop;
-
-  return handlers;
+  machine->cpu->ps = machine->cpu->a = machine->cpu->x = machine->cpu->y = 0;
+  machine->cpu->pc = machine->program_start;
+  machine->cpu->sp = 0xFF;
+  memset(machine->memory, 0, BLOCK_SIZE);
 }
 
 int machine_load(machine_t *machine, const uint8_t program[], size_t length, uint16_t start)
 {
-  assert_or_fatal(machine != NULL);
+  assert_or_fatal(machine);
 
   for (size_t i = 0; i < length; i++) {
     memory_set_byte(machine->memory, start + i, program[i]);
@@ -51,14 +46,14 @@ int machine_load(machine_t *machine, const uint8_t program[], size_t length, uin
 
 int machine_execute(machine_t *machine)
 {
-  assert_or_fatal(machine != NULL);
+  assert_or_fatal(machine);
   handler_params_t params = { .machine = machine };
 
   while (!at_program_end(machine)) {
     uint8_t opcode = memory_get_next_byte(machine->memory, machine->cpu);
     void (*handler)(handler_params_t*) = handler_get(opcode);
 
-    assert_or_fatal(handler != NULL);
+    assert_or_fatal(handler);
 
     handler_get_params(&params, machine, opcode);
     handler(&params);

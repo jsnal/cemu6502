@@ -19,5 +19,6 @@ typedef struct machine_struct {
 machine_t *machine_create();
 int machine_load(machine_t*, const uint8_t program[], size_t length, uint16_t start);
 int machine_execute(machine_t*);
+void machine_reset(machine_t*);
 
 #endif

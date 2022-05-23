@@ -6,7 +6,8 @@
 cpu_t *cpu_create()
 {
   cpu_t *cpu = (cpu_t*) malloc(sizeof(cpu_t));
-  cpu->a = cpu->x = cpu->y = cpu->pc = cpu->ps = cpu->sp = 0;
+  cpu->a = cpu->x = cpu->y = cpu->pc = cpu->ps = 0;
+  cpu->sp = 0xFF;
 
   return cpu;
 }
