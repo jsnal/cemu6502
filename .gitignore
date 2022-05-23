@@ -1,3 +1,4 @@
 all
+test
 cemu6502.*
 *.o

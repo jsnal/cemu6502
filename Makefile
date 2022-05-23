@@ -11,8 +11,14 @@ SOURCES = \
 
 OBJECTS = ${SOURCES:.c=.o}
 
+default: all test
+
 $(NAME): src/main.o $(OBJECTS)
 	$(CC) $(CFLAGS) src/main.o $(OBJECTS) -o $@
+
+.PHONY: test
+test: src/test.o $(OBJECTS)
+	$(CC) $(CFLAGS) src/test.o $(OBJECTS) -o $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -22,4 +28,4 @@ refresh:
 
 .PHONY: clean
 clean:
-	rm -f $(NAME) $(OBJECTS)
+	rm -f $(NAME) $(OBJECTS) test
