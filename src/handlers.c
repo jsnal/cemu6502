@@ -12,7 +12,7 @@ static void (*handlers[256])(handler_params_t*) = {
    fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x30 */
    fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x40 */
    fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x50 */
-   fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x60 */
+   fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, handler_adc_imm,    fail,        fail, fail,               fail,               fail,               fail, /* 0x60 */
    fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x70 */
    fail,           fail,               fail,           fail, handler_st_zpg,     handler_st_zpg,     handler_st_zpg,     fail, fail, fail,               fail,        fail, handler_st_abs,     handler_st_abs,     handler_st_abs,     fail, /* 0x80 */
    fail,           fail,               fail,           fail, fail,               fail,               fail,               fail, fail, fail,               fail,        fail, fail,               fail,               fail,               fail, /* 0x90 */
@@ -61,6 +61,24 @@ static uint16_t get_index_ind_address(machine_t *machine, uint8_t reg)
   uint8_t low = memory_get_byte(machine->memory, address);
   uint8_t high = memory_get_byte(machine->memory, address + 1);
   return (high << 8) + low + reg;
+}
+
+static void add_with_carry(machine_t *machine, uint8_t value)
+{
+  uint8_t old_a = machine->cpu->a;
+  uint16_t sum = value + old_a;
+
+  if (get_processor_status(machine->cpu, PS_CARRY)) {
+    sum += 1;
+  }
+
+  machine->cpu->a = (uint8_t) sum;
+  uint8_t new_a = machine->cpu->a;
+  set_zero_and_negative_flags(machine->cpu, new_a);
+  set_processor_status(machine->cpu, PS_CARRY, sum > 0xFF);
+  set_processor_status(machine->cpu, PS_OVERFLOW,
+                       (value < 0x7F && old_a < 0x7F && new_a > 0x7F) ||
+                       (value > 0x7F && old_a > 0x7F && new_a < 0x7F));
 }
 
 void (*handler_get(uint8_t opcode))(handler_params_t*)
@@ -121,6 +139,11 @@ handler_params_t *handler_get_params(handler_params_t *params, machine_t *machin
   }
 
   return params;
+}
+
+INSTRUCTION(adc_imm)
+{
+  add_with_carry(params->machine, memory_get_next_byte(params->machine->memory, params->machine->cpu));
 }
 
 INSTRUCTION(fail)

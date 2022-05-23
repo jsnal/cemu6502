@@ -26,6 +26,7 @@ void (*handler_get(uint8_t opcode))(handler_params_t*);
 handler_params_t *handler_get_params(handler_params_t*, machine_t*, uint8_t);
 
 /* Prototypes for instruction handlers */
+INSTRUCTION(adc_imm);
 INSTRUCTION(fail);
 INSTRUCTION(nop);
 INSTRUCTION(ld_imm);

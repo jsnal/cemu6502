@@ -26,7 +26,7 @@ int main()
   machine_t *machine = machine_create();
 
   int length = 0;
-  uint8_t *program = read_binary("tests/ld_idx_ind.bin", &length);
+  uint8_t *program = read_binary("tests/adc_imm.bin", &length);
 
   machine_load(machine, program, length, 0x0600);
 
